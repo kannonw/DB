@@ -34,7 +34,7 @@ if table.isdigit():
 listar = input(f"\nGostaria de listar tudo da tabela {table}? (s/n) ")
 
 n = 0
-if (listar == 's'):
+if listar == 's':
     try:
         myCursor.execute(f"SELECT * FROM `{table}`")
         dbTable = myCursor.fetchall()
@@ -52,7 +52,7 @@ if (listar == 's'):
 # Coluna
 myColumns = []
 try:
-    myCursor.execute(f"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = `{table}` AND TABLE_SCHEMA = 'northwind'")
+    myCursor.execute(f"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' AND TABLE_SCHEMA = 'northwind'")
     db = myCursor.fetchall()
 except:
     print(f"O valor {table} é inválido!")
@@ -98,7 +98,7 @@ except:
 
 n = 0
 for registro in db:
-    print(f"{n+1} - {registro[0]}")
+    print(f"{n+1} - {registro}")
     myAttr.insert(n, registro[0])
     n += 1
     if n % 20 == 0:
