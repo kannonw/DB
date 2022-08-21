@@ -20,7 +20,7 @@ db = myCursor.fetchall()
 n = 0
 for registro in db:
     print(f"{n+1} - {registro[0]}")
-    myTables.insert(n, registro[0])
+    myTables.append(registro[0])
     n += 1
     if n % 20 == 0:
         input("Aperte 'enter' para continuar a listagem.")
@@ -60,7 +60,7 @@ except:
 n = 0
 for registro in db:
     print(f"{n+1} - {registro[0]}")
-    myColumns.insert(n, registro[0])
+    myColumns.append(registro[0])
     n += 1
     if n % 20 == 0:
         input("Aperte 'enter' para continuar a listagem.")
@@ -99,7 +99,7 @@ except:
 n = 0
 for registro in db:
     print(f"{n+1} - {registro}")
-    myAttr.insert(n, registro[0])
+    myAttr.append(registro[0])
     n += 1
     if n % 20 == 0:
         input("Aperte 'enter' para continuar a listagem.")
