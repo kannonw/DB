@@ -19,7 +19,7 @@ db = myCursor.fetchall()
 
 n = 0
 for registro in db:
-    print(f"{n+1} - {registro}")
+    print(f"{n+1} - {registro[0]}")
     myTables.insert(n, registro[0])
     n += 1
     if n % 20 == 0:
@@ -34,13 +34,14 @@ if table.isdigit():
 listar = input(f"\nGostaria de listar tudo da tabela {table}? (s/n) ")
 
 n = 0
-if listar == 's':
+if (listar == 's'):
     try:
-        myCursor.execute(f"SELECT * FROM {table}")
-        db = myCursor.fetchall()
+        myCursor.execute(f"SELECT * FROM `{table}`")
+        dbTable = myCursor.fetchall()
     except:
         print(f"O valor {table} é inválido!")
-    for registro in db:
+        
+    for registro in dbTable:
         print(registro)
         n += 1
         if n % 20 == 0:
@@ -51,14 +52,14 @@ if listar == 's':
 # Coluna
 myColumns = []
 try:
-    myCursor.execute(f"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' AND TABLE_SCHEMA = 'northwind'")
+    myCursor.execute(f"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = `{table}` AND TABLE_SCHEMA = 'northwind'")
     db = myCursor.fetchall()
 except:
     print(f"O valor {table} é inválido!")
 
 n = 0
 for registro in db:
-    print(f"{n+1} - {registro}")
+    print(f"{n+1} - {registro[0]}")
     myColumns.insert(n, registro[0])
     n += 1
     if n % 20 == 0:
@@ -75,11 +76,11 @@ listar = input(f"\nGostaria de listar tudo da coluna {column}? (s/n) ")
 n = 0
 if listar == 's':
     try:
-        myCursor.execute(f"SELECT {column} FROM {table}")
-        db = myCursor.fetchall()
+        myCursor.execute(f"SELECT `{column}` FROM `{table}`")
+        dbColumn = myCursor.fetchall()
     except:
         print(f"O valor {column} é inválido!")
-    for registro in db:
+    for registro in dbColumn:
         print(registro)
         n += 1
         if n % 20 == 0:
@@ -90,14 +91,14 @@ if listar == 's':
 # Atributo
 myAttr = []
 try:
-    myCursor.execute(f"SELECT {column} from {table}")
+    myCursor.execute(f"SELECT `{column}` from `{table}`")
     db = myCursor.fetchall()
 except:
     print(f"O valor {column} é inválido!")
 
 n = 0
 for registro in db:
-    print(f"{n+1} - {registro}")
+    print(f"{n+1} - {registro[0]}")
     myAttr.insert(n, registro[0])
     n += 1
     if n % 20 == 0:
@@ -110,9 +111,9 @@ if attr.isdigit():
     attr = myAttr[n-1]
 
 n = 0
-myCursor.execute(f"SELECT * from {table} where {column} like '%{attr}%'")
-db = myCursor.fetchall()
-for registro in db:
+myCursor.execute(f"SELECT * from `{table}` where `{column}` like '%{attr}%'")
+dbAttr = myCursor.fetchall()
+for registro in dbAttr:
     print(registro)
     n += 1
     if n % 20 == 0:
