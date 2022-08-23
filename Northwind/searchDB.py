@@ -48,7 +48,10 @@ def printDB(db):
         print(f"{n+1} - {registro}")
         n += 1
         if n % 20 == 0:
-            input("\nAperte 'enter' para continuar a listagem.\n")
+            continueList = input("\nAperte 'enter' para continuar a listagem.\nParece encerrar a listagem aperte 'e': ")
+            if continueList == 'e' or continueList == 'E':
+                break
+
 
 def inputUser(var, itExists):
     n = 0
