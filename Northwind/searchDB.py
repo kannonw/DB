@@ -57,6 +57,10 @@ def inputUser(var, itExists):
             itExists = True
             return var, itExists
         n += 1
+    # if var.isDigit():
+    #     n = int(var)
+    #     var = db[n-1]
+    # Usado anteriormente
 
     if itExists == False:
         print(f"Erro! Valor '{var}' não itExists")
