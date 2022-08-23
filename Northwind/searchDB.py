@@ -40,6 +40,7 @@ def select(listSearch, type, printAll):
         myCursor.execute(f"SELECT * from `{listSearch[0]}` where `{listSearch[1]}` like '%{listSearch[2]}%'")
         db = myCursor.fetchall()
         printDB(db)
+        return db
 
 def printDB(db):
     n = 0
@@ -47,10 +48,11 @@ def printDB(db):
         print(f"{n+1} - {registro}")
         n += 1
         if n % 20 == 0:
-            input("Aperte 'enter' para continuar a listagem.")
+            input("\nAperte 'enter' para continuar a listagem.\n")
 
 def inputUser(var, itExists):
     n = 0
+    var = var.strip()
     for registro in db:
         if var == registro[0] or str(n+1) == var:
             var = registro[0]
@@ -63,7 +65,7 @@ def inputUser(var, itExists):
     # Usado anteriormente
 
     if itExists == False:
-        print(f"Erro! Valor '{var}' não itExists")
+        print(f"Erro! Valor '{var}' não é válido")
         return var, itExists
 
 def tolistAll(toList):
