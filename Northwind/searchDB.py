@@ -59,7 +59,7 @@ def inputUser(var, itExists):
         n += 1
     # if var.isDigit():
     #     n = int(var)
-    #     var = db[n-1]
+    #     var = db[n-1][0]
     # Usado anteriormente
 
     if itExists == False:
