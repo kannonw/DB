@@ -52,7 +52,6 @@ def printDB(db):
             if continueList == 'e' or continueList == 'E':
                 break
 
-
 def inputUser(var, itExists):
     n = 0
     var = var.strip()
@@ -78,54 +77,55 @@ def tolistAll(toList):
         printAll = False
     return printAll
 
+def which(type):
+    itExists = False
+    while itExists == False:
+        var = input(f"\nDigite o número ou o nome da {type}: ")
+        inputDB = inputUser(var, itExists)
+        itExists = inputDB[1]
+    type = inputDB[0]
+    return type
+
 ###################################
 # Tabela
 myCursor.execute("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='northwind'")
 db = myCursor.fetchall()
 printDB(db)
 
-itExists = False
-table = ""
-while itExists == False:
-    var = input("\nDigite o número ou o nome da tabela: ")
-    inputDB = inputUser(var, itExists)
-    table = inputDB[0]
-    itExists = inputDB[1]
+# Requisita o usuário o número ou o nome da tabela
+table = "tabela"
+table = which(table)
 
+# Lista para armazenar os inputs do usuário e facilitar no método select()
 listSearch = []
 listSearch.append(table)
 toList = input(f"\nGostaria de listar tudo da tabela {table}? (s/n) \nOBS: O programa irá encerrar caso escolha 's': ")
 
+# Verifica se o usuário deseja imprimir os dados
 printAll = tolistAll(toList)
-
+# Faz o select
 db = select(listSearch, "table", printAll)
 
 ###################################
 # Coluna
-column = ""
-itExists = False
-while itExists == False:
-    var = input("\nDigite o número ou o nome da coluna: ")
-    inputDB = inputUser(var, itExists)
-    column = inputDB[0]
-    itExists = inputDB[1]
+# Requisita o usuário o número ou o nome da coluna
+column = "coluna"
+column = which(column)
 
 listSearch.append(column)
 toList = input(f"\nGostaria de listar tudo da coluna {column}? (s/n) \nOBS: O programa irá encerrar caso escolha 's': ")
 
+# Verifica se o usuário deseja imprimir os dados
 printAll = tolistAll(toList)
-
+# Faz o select
 db = select(listSearch, "column", printAll)
 
 ###################################
 # Atributo
-attr = ""
-itExists = False
-while itExists == False:
-    var = input("\nDigite o número ou o nome da atributo: ")
-    inputDB = inputUser(var, itExists)
-    attr = inputDB[0]
-    itExists = inputDB[1]
+# Requisita o usuário o número ou o nome do atributo
+attr = "atributo"
+attr = which(attr)
 
 listSearch.append(attr)
+# Faz o select
 db = select(listSearch, "attr", printAll)
