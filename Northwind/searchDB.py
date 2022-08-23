@@ -12,109 +12,111 @@ mydb = mysql.connector.connect(
 myCursor = mydb.cursor()
 
 ###################################
-# Tabela
-myTables = []
-myCursor.execute("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='northwind'")
-db = myCursor.fetchall()
+# Funções
+def select(listSearch, type, printAll):
+    if type == "table":
+        if printAll:
+            myCursor.execute(f"SELECT * FROM `{listSearch[0]}`")
+            db = myCursor.fetchall()
+            printDB(db)
+            exit()
+        else:
+            myCursor.execute(f"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{listSearch[0]}' AND TABLE_SCHEMA = 'northwind'")
+            db = myCursor.fetchall()
+            printDB(db)
+            return db
+    elif type == "column":
+        if printAll:
+            myCursor.execute(f"SELECT `{listSearch[1]}` from `{listSearch[0]}`")
+            db = myCursor.fetchall()
+            printDB(db)
+            exit()
+        else:
+            myCursor.execute(f"SELECT `{listSearch[1]}` from `{listSearch[0]}`")
+            db = myCursor.fetchall()
+            printDB(db)
+            return db
+    elif type == "attr":
+        myCursor.execute(f"SELECT * from `{listSearch[0]}` where `{listSearch[1]}` like '%{listSearch[2]}%'")
+        db = myCursor.fetchall()
+        printDB(db)
 
-n = 0
-for registro in db:
-    print(f"{n+1} - {registro[0]}")
-    myTables.append(registro[0])
-    n += 1
-    if n % 20 == 0:
-        input("Aperte 'enter' para continuar a listagem.")
-
-table = input("\nDigite o número ou o nome da tabela: ")
-
-if table.isdigit():
-    n = int(table)
-    table = myTables[n-1]
-
-listar = input(f"\nGostaria de listar tudo da tabela {table}? (s/n) ")
-
-n = 0
-if listar == 's':
-    try:
-        myCursor.execute(f"SELECT * FROM `{table}`")
-        dbTable = myCursor.fetchall()
-    except:
-        print(f"O valor {table} é inválido!")
-        
-    for registro in dbTable:
-        print(registro)
+def printDB(db):
+    n = 0
+    for registro in db:
+        print(f"{n+1} - {registro}")
         n += 1
         if n % 20 == 0:
             input("Aperte 'enter' para continuar a listagem.")
-    exit()
+
+def inputUser(var, itExists):
+    n = 0
+    for registro in db:
+        if var == registro[0] or str(n+1) == var:
+            var = registro[0]
+            itExists = True
+            return var, itExists
+        n += 1
+
+    if itExists == False:
+        print(f"Erro! Valor '{var}' não itExists")
+        return var, itExists
+
+def tolistAll(toList):
+    if toList == 's' or toList == 'S':
+        printAll = True
+    else:
+        printAll = False
+    return printAll
+
+###################################
+# Tabela
+myCursor.execute("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='northwind'")
+db = myCursor.fetchall()
+printDB(db)
+
+itExists = False
+table = ""
+while itExists == False:
+    var = input("\nDigite o número ou o nome da tabela: ")
+    inputDB = inputUser(var, itExists)
+    table = inputDB[0]
+    itExists = inputDB[1]
+
+listSearch = []
+listSearch.append(table)
+toList = input(f"\nGostaria de listar tudo da tabela {table}? (s/n) \nOBS: O programa irá encerrar caso escolha 's': ")
+
+printAll = tolistAll(toList)
+
+db = select(listSearch, "table", printAll)
 
 ###################################
 # Coluna
-myColumns = []
-try:
-    myCursor.execute(f"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' AND TABLE_SCHEMA = 'northwind'")
-    db = myCursor.fetchall()
-except:
-    print(f"O valor {table} é inválido!")
+column = ""
+itExists = False
+while itExists == False:
+    var = input("\nDigite o número ou o nome da coluna: ")
+    inputDB = inputUser(var, itExists)
+    column = inputDB[0]
+    itExists = inputDB[1]
 
-n = 0
-for registro in db:
-    print(f"{n+1} - {registro[0]}")
-    myColumns.append(registro[0])
-    n += 1
-    if n % 20 == 0:
-        input("Aperte 'enter' para continuar a listagem.")
+listSearch.append(column)
+toList = input(f"\nGostaria de listar tudo da coluna {column}? (s/n) \nOBS: O programa irá encerrar caso escolha 's': ")
 
-column = input("\nDigite o número ou o nome da coluna: ")
+printAll = tolistAll(toList)
 
-if column.isdigit():
-    n = int(column)
-    column = myColumns[n-1]
-
-listar = input(f"\nGostaria de listar tudo da coluna {column}? (s/n) ")
-
-n = 0
-if listar == 's':
-    try:
-        myCursor.execute(f"SELECT `{column}` FROM `{table}`")
-        dbColumn = myCursor.fetchall()
-    except:
-        print(f"O valor {column} é inválido!")
-    for registro in dbColumn:
-        print(registro)
-        n += 1
-        if n % 20 == 0:
-            input("Aperte 'enter' para continuar a listagem.")
-    exit()
+db = select(listSearch, "column", printAll)
 
 ###################################
 # Atributo
-myAttr = []
-try:
-    myCursor.execute(f"SELECT `{column}` from `{table}`")
-    db = myCursor.fetchall()
-except:
-    print(f"O valor {column} é inválido!")
+attr = ""
+itExists = False
+while itExists == False:
+    var = input("\nDigite o número ou o nome da atributo: ")
+    inputDB = inputUser(var, itExists)
+    attr = inputDB[0]
+    itExists = inputDB[1]
 
-n = 0
-for registro in db:
-    print(f"{n+1} - {registro}")
-    myAttr.append(registro[0])
-    n += 1
-    if n % 20 == 0:
-        input("Aperte 'enter' para continuar a listagem.")
-
-attr = input("\nDigite o número ou o nome do atributo: ")
-
-if attr.isdigit():
-    n = int(attr)
-    attr = myAttr[n-1]
-
-n = 0
-myCursor.execute(f"SELECT * from `{table}` where `{column}` like '%{attr}%'")
-dbAttr = myCursor.fetchall()
-for registro in dbAttr:
-    print(registro)
-    n += 1
-    if n % 20 == 0:
-        input("Aperte 'enter' para continuar a listagem.")
+listSearch.append(attr)
+db = select(listSearch, "attr", printAll)
