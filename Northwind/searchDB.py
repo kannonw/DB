@@ -13,9 +13,9 @@ myCursor = mydb.cursor()
 
 ###################################
 # Funções
-def select(listSearch, type, printAll):
+def select(listSearch, type, boolUserChoice):
     if type == "table":
-        if printAll:
+        if boolUserChoice:
             myCursor.execute(f"SELECT * FROM `{listSearch[0]}`")
             db = myCursor.fetchall()
             printDB(db)
@@ -26,7 +26,7 @@ def select(listSearch, type, printAll):
             printDB(db)
             return db
     elif type == "column":
-        if printAll:
+        if boolUserChoice:
             myCursor.execute(f"SELECT `{listSearch[1]}` from `{listSearch[0]}`")
             db = myCursor.fetchall()
             printDB(db)
@@ -37,10 +37,10 @@ def select(listSearch, type, printAll):
             printDB(db)
             return db
     elif type == "attr":
-        myCursor.execute(f"SELECT * from `{listSearch[0]}` where `{listSearch[1]}` like '%{listSearch[2]}%'")
-        db = myCursor.fetchall()
-        printDB(db)
-        return db
+            myCursor.execute(f"SELECT * from `{listSearch[0]}` where `{listSearch[1]}` like '{listSearch[2]}'")
+            db = myCursor.fetchall()
+            printDB(db)
+            return db
 
 def printDB(db):
     n = 0
@@ -70,12 +70,12 @@ def inputUser(var, itExists):
         print(f"Erro! Valor '{var}' não é válido")
         return var, itExists
 
-def tolistAll(toList):
+def booleanUserList(toList):
     if toList == 's' or toList == 'S':
-        printAll = True
+        boolUserChoice = True
     else:
-        printAll = False
-    return printAll
+        boolUserChoice = False
+    return boolUserChoice
 
 def which(type):
     itExists = False
@@ -99,12 +99,12 @@ table = which(table)
 # Lista para armazenar os inputs do usuário e facilitar no método select()
 listSearch = []
 listSearch.append(table)
-toList = input(f"\nGostaria de listar tudo da tabela {table}? (s/n) \nOBS: O programa irá encerrar caso escolha 's': ")
+toList = input(f"\nGostaria de listar tudo da tabela {table}? (s/n) \nOBS: O programa irá se encerrar caso escolha 's': ")
 
 # Verifica se o usuário deseja imprimir os dados
-printAll = tolistAll(toList)
+boolUserChoice = booleanUserList(toList)
 # Faz o select
-db = select(listSearch, "table", printAll)
+db = select(listSearch, "table", boolUserChoice)
 
 ###################################
 # Coluna
@@ -113,19 +113,20 @@ column = "coluna"
 column = which(column)
 
 listSearch.append(column)
-toList = input(f"\nGostaria de listar tudo da coluna {column}? (s/n) \nOBS: O programa irá encerrar caso escolha 's': ")
+toList = input(f"\nGostaria de listar tudo da coluna {column}? (s/n) \nOBS: O programa irá se encerrar caso escolha 's': ")
 
 # Verifica se o usuário deseja imprimir os dados
-printAll = tolistAll(toList)
+boolUserChoice = booleanUserList(toList)
 # Faz o select
-db = select(listSearch, "column", printAll)
+db = select(listSearch, "column", boolUserChoice)
 
 ###################################
 # Atributo
 # Requisita o usuário o número ou o nome do atributo
+
 attr = "atributo"
 attr = which(attr)
 
 listSearch.append(attr)
 # Faz o select
-db = select(listSearch, "attr", printAll)
+db = select(listSearch, "attr", boolUserChoice)
