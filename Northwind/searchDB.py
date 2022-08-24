@@ -1,3 +1,4 @@
+from ast import While
 from curses.ascii import *
 from doctest import register_optionflag
 from sys import excepthook
@@ -27,28 +28,35 @@ def select(listSearch, type, boolUserChoice):
             return db
     elif type == "column":
         if boolUserChoice:
-            myCursor.execute(f"SELECT `{listSearch[1]}` from `{listSearch[0]}`")
+            myCursor.execute(f"SELECT {listSearch[1]} from `{listSearch[0]}`")
             db = myCursor.fetchall()
             printDB(db)
             exit()
         else:
-            myCursor.execute(f"SELECT `{listSearch[1]}` from `{listSearch[0]}`")
+            myCursor.execute(f"SELECT {listSearch[1]} from `{listSearch[0]}`")
             db = myCursor.fetchall()
             printDB(db)
             return db
     elif type == "attr":
-            myCursor.execute(f"SELECT * from `{listSearch[0]}` where `{listSearch[1]}` like '{listSearch[2]}'")
+            myCursor.execute(f"SELECT * from {listSearch[0]} where `{listSearch[1]}` like '{listSearch[2]}'")
             db = myCursor.fetchall()
             printDB(db)
             return db
 
 def printDB(db):
     n = 0
+    
+    if len(db) == 0:
+        input("\nEssa lista está vazia.")
+        exit()
+    else:
+        input(f"\nForam encontrados {len(db)} resultados. Pressione 'enter' para listar: ")
+
     for registro in db:
         print(f"{n+1} - {registro}")
         n += 1
         if n % 20 == 0:
-            continueList = input("\nAperte 'enter' para continuar a listagem.\nParece encerrar a listagem aperte 'e': ")
+            continueList = input("\nAperte 'enter' para continuar a listagem.\nPara encerrar a listagem aperte 'e': ")
             if continueList == 'e' or continueList == 'E':
                 break
 
@@ -71,11 +79,15 @@ def inputUser(var, itExists):
         return var, itExists
 
 def booleanUserList(toList):
-    if toList == 's' or toList == 'S':
-        boolUserChoice = True
-    else:
-        boolUserChoice = False
-    return boolUserChoice
+    while True:
+        if toList == 's' or toList == 'S':
+            boolUserChoice = True
+            return boolUserChoice
+        elif toList == 'n' or toList == 'N':
+            boolUserChoice = False
+            return boolUserChoice
+        else:
+            toList = input("Insira um valor válido (s/n): ")
 
 def which(type):
     itExists = False
@@ -90,7 +102,10 @@ def which(type):
 # Tabela
 myCursor.execute("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='northwind'")
 db = myCursor.fetchall()
-printDB(db)
+i=1
+for registro in db:
+    print(f"{i} - {registro[0]}")
+    i += 1
 
 # Requisita o usuário o número ou o nome da tabela
 table = "tabela"
@@ -109,8 +124,25 @@ db = select(listSearch, "table", boolUserChoice)
 ###################################
 # Coluna
 # Requisita o usuário o número ou o nome da coluna
-column = "coluna"
-column = which(column)
+columnString = "coluna"
+column = which(columnString)
+
+toList = input("\nDeseja adicionar colunas a pesquisa? \nOBS: O programa se encerrará após ter escolhido e listado as colunas (s/n) ")
+addColumn = booleanUserList(toList)
+
+if addColumn == True:
+    while True:
+        b = which(columnString)
+        column = column + ", " + b
+        toList = input("\nDeseja continuar? (s/n) ")
+        toList = booleanUserList(toList)
+
+        if toList == False:
+            listSearch.append(column)
+            myCursor.execute(f"SELECT {listSearch[1]} from `{listSearch[0]}`")
+            db = myCursor.fetchall()
+            printDB(db)
+            exit()
 
 listSearch.append(column)
 toList = input(f"\nGostaria de listar tudo da coluna {column}? (s/n) \nOBS: O programa irá se encerrar caso escolha 's': ")
@@ -123,7 +155,6 @@ db = select(listSearch, "column", boolUserChoice)
 ###################################
 # Atributo
 # Requisita o usuário o número ou o nome do atributo
-
 attr = "atributo"
 attr = which(attr)
 
