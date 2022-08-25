@@ -38,7 +38,7 @@ def select(listSearch, type, boolUserChoice):
             printDB(db)
             return db
     elif type == "attr":
-            myCursor.execute(f"SELECT * from {listSearch[0]} where `{listSearch[1]}` like '{listSearch[2]}'")
+            myCursor.execute(f"SELECT * from `{listSearch[0]}` where {listSearch[1]} = '{listSearch[2]}'")
             db = myCursor.fetchall()
             printDB(db)
             return db
@@ -49,8 +49,10 @@ def printDB(db):
     if len(db) == 0:
         input("\nEssa lista está vazia.")
         exit()
-    else:
+    elif len(db) > 50:
         input(f"\nForam encontrados {len(db)} resultados. Pressione 'enter' para listar: ")
+    else:
+        print(f"\nForam encontrados {len(db)} resultados.")
 
     for registro in db:
         print(f"{n+1} - {registro}")
@@ -61,10 +63,10 @@ def printDB(db):
                 break
 
 def inputUser(var, itExists):
-    n = 0
+    n = 1
     var = var.strip()
     for registro in db:
-        if var == registro[0] or str(n+1) == var:
+        if var == registro[0] or str(n) == var:
             var = registro[0]
             itExists = True
             return var, itExists
