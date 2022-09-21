@@ -39,4 +39,4 @@ for i in range(1, 51):
     values ({i}, "{nome}", '{gen}', "{r.choice(enfermidade)}", {int(dono_pet[0][0])}, "{r.choice(esp)}");""")
     mydb.commit()
 
-    # print(f"values ({i}, '{nome}'', '{gen}', '{r.choice(enfermidade)}', {dono}, '{r.choice(esp)}')")
+    print(f"values ({i}, '{nome}'', '{gen}', '{r.choice(enfermidade)}', {int(dono_pet[0][0])}, '{r.choice(esp)}')")

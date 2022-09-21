@@ -44,4 +44,6 @@ for i in range(1, 16):
     mycursor.execute(f"""insert into veterinario (codigo_veterinario, nome_veterinario, telefone_veterinario, endereco_veterinario, salario_veterinario, data_de_ingresso, data_de_saida, carga_horaria_semanal)
     values ({i}, "{r.choice(nome)}", "{num}", "{r.choice(endereco)}, Nº {r.randint(1, 999)}", {r.choice(salario)}, '{ano}-{mes}-{dia}', '{anof}-{mesf}-{diaf}', {r.randint(30, 60)});""")
     mydb.commit()
+
+    # print(f"values ({i}, '{r.choice(nome)}', '{num}', '{r.choice(endereco)}, Nº {r.randint(1, 999)}', {r.choice(salario)}, '{ano}-{mes}-{dia}', '{anof}-{mesf}-{diaf}', {r.randint(30, 60)});")
     

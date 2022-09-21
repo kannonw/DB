@@ -31,3 +31,5 @@ for i in range(1, 101):
     mycursor.execute(f"""insert into consulta (codigo_consulta, codigo_cliente, codigo_veterinario, preco_consulta, data_consulta)
     values ({i}, {c}, {r.randint(1, 15)}, {r.choice(preco)}, '{ano}-{mes}-{dia}');""")
     mydb.commit()
+
+    # print(f"values ({i}, {c}, {r.randint(1, 15)}, {r.choice(preco)}, '{ano}-{mes}-{dia}')")
