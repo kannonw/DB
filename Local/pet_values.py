@@ -17,18 +17,10 @@ nomeF = ["Sandy","Lola", "Melzinha", "Luna",  "Pandora", "Bella", "Joy", "Filipa
 
 enfermidade = ["Língua Azul", "Febre Aftosa", "Encefalomielite Equina", "Encefalopatias Espongiformes Transmissíveis", "Enfermidade Debilitante Crônica", "Erliquiose Bovina","Estomatite Vesicular","Febre Aftosa", "Febre Catarral Maligna","Febre Efêmera Bovina", "Febre Q", "Febres Hemorrágicas por Arenavírus", "Hantavirus", "Hendra", "Infecção pelo Vírus do Nilo Ocidental", "Infecção pelo Virus Menangle"]
 
-dono_verificador = []
 
 for i in range(1, 51):
     n = r.randint(1,2)
     dono = r.randint(1,50)
-
-    while True:
-        if dono in dono_verificador:
-            dono = r.randint(1,50)
-        else:
-            dono_verificador.append(dono)
-            break
 
     if n == 2:
         nome = r.choice(nomeM)
@@ -37,6 +29,14 @@ for i in range(1, 51):
         nome = r.choice(nomeF)
         gen = 'F'
 
+
+    mycursor.execute(f"select distinct codigo_cliente from cliente where cliente.pet_cliente = {i};")
+    dono_pet = mycursor.fetchall()
+
+    # print(dono_pet[0][0])
+
     mycursor.execute(f"""insert into pet (codigo_pet, nome_pet, sexo_pet, enfermidade, dono_pet, especie)
-    values ({i}, "{nome}", '{gen}', "{r.choice(enfermidade)}", {dono}, "{r.choice(esp)}");""")
+    values ({i}, "{nome}", '{gen}', "{r.choice(enfermidade)}", {int(dono_pet[0][0])}, "{r.choice(esp)}");""")
     mydb.commit()
+
+    # print(f"values ({i}, '{nome}'', '{gen}', '{r.choice(enfermidade)}', {dono}, '{r.choice(esp)}')")
