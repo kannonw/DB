@@ -35,7 +35,7 @@ for i in range(1, 51):
     s = r.choice(sobrenome)
 
     mycursor.execute(f"""insert into cliente (nome, endereco, cpf, telefone, data_de_nascimento, email)
-    values ("{n} {s}", "{r.choice(endereco)}, Nº {r.randint(1, 999)}", "{cpfx}", "{r.choice(telefone)}", '{ano}-{mes}-{dia}', "{n.lower()}.{s.lower()}{r.choice(email)}");""")
+    values ("{n} {s}", "{r.choice(endereco)}, Nº {r.randint(1, 999)}", "{cpfx}", "{num}", '{ano}-{mes}-{dia}', "{n.lower()}.{s.lower()}{r.choice(email)}");""")
     mydb.commit()
 
     # print(f"{n} {s}, {r.choice(endereco)}, Nº {r.randint(1, 999)}, {cpfx}, {r.choice(telefone)}, '{ano}-{mes}-{dia}', {n.lower()}.{s.lower()}{r.choice(email)});")
