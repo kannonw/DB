@@ -20,7 +20,7 @@ enfermidade = ["Língua Azul", "Febre Aftosa", "Encefalomielite Equina", "Encefa
 
 for i in range(1, 51):
     n = r.randint(1,2)
-    dono = r.randint(1,50)
+    # dono = r.randint(1,50)
 
     if n == 2:
         nome = r.choice(nomeM)
