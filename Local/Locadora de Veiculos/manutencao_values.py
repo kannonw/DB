@@ -22,7 +22,14 @@ for i in range (1, 21):
     data = str(data[0][0])
     # print(data)
 
-    dia = r.randint(int(data[8:10]), 30); mes = r.randint(int(data[5:7]), 12); ano = r.randint(int(data[0:4]), 2022)
+    dia = r.randint(1, 30); mes = r.randint(1, 12); ano = r.randint(int(data[0:4]), 2022)
+
+    # Caso a ano/mês de manutenção seja o mesmo que o do contrato
+    if ano == 2022:
+        mes = r.randint(int(data[5:7]), 12)
+        if mes == 12:
+            dia = r.randint(int(data[8:10]), 30)
+
 
     mycursor.execute(f"""insert into manutencao (id_manutencao, placa_do_veiculo, custo_medio_mensal, data_manutencao)
     values ({i}, "{placa[index][0]}", {r.choice(custo)}, '{ano}-{mes}-{dia}');""")
