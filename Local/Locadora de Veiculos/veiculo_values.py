@@ -36,7 +36,7 @@ for i in range(1, 51):
     marca = carro[index][0]
     modelo = carro[index][1]
     combustivel = carro[index][2]
-
+    
     placa0 = "".join(r.sample(string, 3))
     placa1 = "".join(r.sample(num,2))
     placa = placa0 + r.choice(num) + r.choice(string) + placa1
